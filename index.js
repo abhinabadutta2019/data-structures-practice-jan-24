@@ -1,42 +1,69 @@
-// https://youtu.be/ba15sgOiAOg?si=scmGTbrVuHDKJn5q
-
-class Queue {
-  constructor() {
-    // this.items = [];
-    this.items = {};
-    this.rear = 0;
-    this.front = 0;
-    // this.count = 0;
-  }
-  enqueue(element) {
-    this.items[this.rear] = element;
-    this.rear += 1;
-    console.log(this.items);
-  }
-  dequeue() {
-    const item = this.items[this.front];
-
-    console.log(item, "item");
+//https://youtu.be/oIR_DOOOACk?si=bcJCF-nTwelN8cnd
+class CircualarQueue {
+  constructor(capacity) {
     //
-    delete this.items[this.front];
-    this.front += 1;
-    console.log(this.items, "after delete");
-    //
-    console.log(this.rear, "rear");
-    console.log(this.front, "front");
+    this.items = new Array();
+    this.capacity = capacity;
+    this.currentLength = 0;
+    this.rear = -1;
+    this.front = -1;
   }
   //
-  watch() {
-    console.log(this.items);
+  isFull() {
+    return this.currentLength === this.capacity;
   }
+  //
+  isEmpty() {
+    return this.currentLength === 0;
+  }
+  //
+  enqueue(element) {
+    if (!this.isFull()) {
+      this.rear = (this.rear + 1) % this.capacity;
+      this.items[this.rear] = element;
+      this.currentLength += 1;
+      //
+      if (this.front === -1) {
+        this.front = this.rear;
+      }
+      console.log(this.items);
+    }
+  }
+  //
+  dequeue() {
+    if (this.isEmpty()) {
+      return null;
+    }
+    const item = this.items[this.front];
+    this.items[this.front] = null;
+    this.front = (this.front + 1) % this.capacity;
+    if (this.isEmpty()) {
+      this.front = -1;
+      this.rear = -1;
+    }
+
+    //
+    console.log(this.items, "de queue");
+    //
+    return item;
+  }
+  //
+  // print() {
+  //   if (this.isEmpty()) {
+  //     console.log("Queue is isEmpty");
+  //   } else {
+  //     let i;
+  //   }
+  // }
 }
 
-const queue = new Queue();
+const circularQueue = new CircualarQueue(5);
 
-queue.enqueue(100);
-queue.enqueue(200);
-queue.enqueue(300);
-queue.enqueue(400);
+circularQueue.enqueue(10);
+circularQueue.enqueue(20);
+circularQueue.enqueue(30);
+circularQueue.enqueue(40);
+circularQueue.enqueue(50);
 //
-queue.dequeue();
-queue.dequeue();
+circularQueue.dequeue();
+circularQueue.enqueue(100);
